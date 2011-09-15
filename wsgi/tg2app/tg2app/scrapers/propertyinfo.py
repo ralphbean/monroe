@@ -88,7 +88,7 @@ class ForeclosureScraper(Scraper):
             raise ValueError, "end date must come after begin date"
         if (end_date - beg_date) > datetime.timedelta(days=15):
             raise ValueError, "Cannot scrape tdelta > 15 days.  Source hangs."
-      
+
         # Setting up our mechanize browser
         self.init_browser()
 
@@ -117,7 +117,7 @@ class ForeclosureScraper(Scraper):
                 data[i][header] = georows[i][header]
         # TODO -- a more pythonic way to do what the above nested loops do?
         #data = [data[i] + georows[i] for i in range(len(data))]
-        
+
         # Checks for now to see how well geocoding works.
         success = sum([1 for grow in georows if grow['Map Ready']])
         fail = sum([1 for grow in georows if not grow['Map Ready']])
@@ -134,7 +134,7 @@ class ForeclosureScraper(Scraper):
         log.debug("Saving to: %s" % f)
         file = open(f, 'w')
         file.writelines(lines)
-        file.close() 
+        file.close()
 
         # Seal the deal
         self.git_add_and_commit("Updated Property Foreclosures")
@@ -145,7 +145,7 @@ class ForeclosureScraper(Scraper):
         fdate = datetime.datetime(1989, 1, 1)
         tdate = datetime.datetime.today()
         step = 7 # in days
-        
+
         def date_range(from_date, to_date, step):
             while from_date < to_date:
                 yield from_date
@@ -166,7 +166,7 @@ class ForeclosureScraper(Scraper):
         self.browser.set_handle_redirect(True)
         self.browser.set_handle_referer(True)
         self.browser.set_handle_robots(False)
-    
+
 
     # Ugly.
     def geodict_from_row(self, row):
@@ -197,7 +197,7 @@ class ForeclosureScraper(Scraper):
         if len(results) != 1:
             log.warn( "Geocode: more than one match, failed '%s'." % addr )
             return r([False, "(found more than one match)", 0, 0])
-        
+
         result = results[0]
         if not 'street_address' in result['types']:
             log.warn( "Geocode: ambiguity in resolving '%s'." % addr )
@@ -210,7 +210,7 @@ class ForeclosureScraper(Scraper):
                 if not 'NY' == component['short_name']:
                     log.warn("Geocode: not in New York, failed '%s'." % addr)
                     return r([False, "(not in NY)", 0, 0])
-        
+
         # We all good.
         loc = result['geometry']['location']
         return r([ True, result['formatted_address'], loc['lat'], loc['lng'] ])
@@ -231,7 +231,7 @@ class ForeclosureScraper(Scraper):
         self.browser.form.find_control(name).readonly = False
         self.browser.form[name] = value
         self.browser.form.find_control(name).readonly = True
-    
+
     def get_total_pages(self):
         try:
             self.browser.select_form(name='frmResult')
@@ -239,10 +239,10 @@ class ForeclosureScraper(Scraper):
             log.debug(" * Form not found.  No results?")
             return 0
         return int(self.browser.form['totalPages'])
-    
+
     def load_page_number(self, next_page):
         if next_page == 1:
-            return 
+            return
         self.browser.select_form(name='frmResult')
         total_pages = self.get_total_pages()
         log.debug("Going to page %i of %i" % (next_page, total_pages))
@@ -255,7 +255,7 @@ class ForeclosureScraper(Scraper):
 
     def load_results_page(self, beg_date, end_date):
         log.debug("Trying to load page 1 of ??")
-    
+
         # Login page
         # TODO -- there are about 6 other counties we can scrape here.
         url = '%s/NY-Monroe/' % self.base
@@ -263,9 +263,9 @@ class ForeclosureScraper(Scraper):
         self.browser.follow_link(url_regex=re.compile('.*loginForm.*'))
         self.browser.select_form(nr=0)
         self.browser.form['txtUserName'] = config.get('propertyinfo.username')
-        self.browser.form['txtPassword'] = config.get('propertyinfo.password') 
+        self.browser.form['txtPassword'] = config.get('propertyinfo.password')
         self.browser.submit()
-    
+
         # Load search page and input criteria
         self.browser.follow_link(url_regex=re.compile('.*=2004.*'))
         self.browser.select_form(name='frmSavedCriteria')
@@ -276,7 +276,7 @@ class ForeclosureScraper(Scraper):
                               "NOTICE OF PENDENCY MORTGAGE FORECLOSURE")
         self.browser.form.action = '%s/wam3/SearchSummary.asp' % self.base
         self.browser.submit()
-    
+
         # Follow an implicit redirect
         try:
             # which, however, will shit the bed if there are no results
