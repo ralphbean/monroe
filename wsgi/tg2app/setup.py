@@ -34,6 +34,7 @@ setup(
     #url='',
     install_requires=[
         "tg.devtools",
+        "tgscheduler",
         "TurboGears2 >= 2.1.2",
         "Mako",
         "zope.sqlalchemy >= 0.4",

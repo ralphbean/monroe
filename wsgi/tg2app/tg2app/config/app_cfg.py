@@ -7,10 +7,10 @@ This file complements development/deployment.ini.
 Please note that **all the argument values are strings**. If you want to
 convert them into boolean, for example, you should use the
 :func:`paste.deploy.converters.asbool` function, as in::
-    
+
     from paste.deploy.converters import asbool
     setting = asbool(global_conf.get('the_setting'))
- 
+
 """
 
 import os
@@ -18,6 +18,7 @@ import os
 from tg.configuration import AppConfig
 from pylons import config
 
+import cron
 import tg2app
 from tg2app import model
 from tg2app.lib import app_globals, helpers
@@ -45,6 +46,8 @@ base_config = OpenShiftConfig()
 base_config.renderers = []
 
 base_config.package = tg2app
+
+base_config.call_on_startup = [cron.schedule]
 
 #Enable json in expose
 base_config.renderers.append('json')
