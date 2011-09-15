@@ -14,6 +14,8 @@ from tg2app.controllers.secure import SecureController
 
 from tg2app.controllers.error import ErrorController
 
+from tg2app.widgets import ForeclosureGrid
+
 __all__ = ['RootController']
 
 
@@ -41,6 +43,16 @@ class RootController(BaseController):
     def index(self):
         """Handle the front-page."""
         return dict(page='index')
+
+    @expose('json')
+    def jqgrid(self, *args, **kwargs):
+        return ForeclosureGrid.request(request).body
+
+    @expose('tg2app.templates.widget')
+    def grid(self):
+        return dict(page='whut', widget=ForeclosureGrid)
+
+
 
     @expose('tg2app.templates.about')
     def about(self):
