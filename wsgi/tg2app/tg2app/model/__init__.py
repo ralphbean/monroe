@@ -19,7 +19,7 @@ DeclarativeBase = declarative_base()
 
 # There are two convenient ways for you to spare some typing.
 # You can have a query property on all your model classes by doing this:
-# DeclarativeBase.query = DBSession.query_property()
+DeclarativeBase.query = DBSession.query_property()
 # Or you can use a session-aware mapper as it was used in TurboGears 1:
 # DeclarativeBase = declarative_base(mapper=DBSession.mapper)
 
@@ -60,3 +60,4 @@ def init_model(engine):
 
 # Import your model modules here.
 from tg2app.model.auth import User, Group, Permission
+from tg2app.model.foreclosure import Foreclosure

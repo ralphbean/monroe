@@ -1,8 +1,14 @@
-from tgscheduler import start_scheduler
-from tgscheduler.scheduler import add_interval_task, add_weekday_task, add_single_task
+
 import sys
 import logging
+
+from tgscheduler import start_scheduler
+from tgscheduler.scheduler import add_interval_task
+
+from tg2app.scrapers.propertyinfo import ForeclosureScraper
+
 log = logging.getLogger(__name__)
+
 
 def testTask(email=None):
     log.info("testTask Called")
@@ -19,7 +25,7 @@ def schedule():
     HOUR = 60*60
 
     add_interval_task(
-        action=testTask,
+        action=ForeclosureScraper().scrape_data,
         taskname="test1",
         interval=HOUR,
         initialdelay=0

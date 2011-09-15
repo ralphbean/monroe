@@ -1,19 +1,4 @@
-# This file is part of CIVX.
-#
-# CIVX is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# CIVX is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with CIVX.  If not, see <http://www.gnu.org/licenses/>.
-#
-# Copyright 2008-2010, CIVX, Inc.
+# This file was once part of CIVX.
 """
 :mod:`civx.scrapers.propertyinfo` -- The PropertyInfo Scraper
 ================================================================
@@ -30,28 +15,32 @@ import logging
 import mechanize
 import os
 import re
+import simplejson
+import time
+import urllib
+
+import tg2app.model as m
 
 from BeautifulSoup import BeautifulSoup
+from tg import config
 
-import civx
-
-from civx.utils import get_civx_config
-from civx.utils import geocode
-from civx.model import PropertyInfoForeclosure
-from civx.scrapers import Scraper
-
-log = logging.getLogger('moksha.hub')
-config = get_civx_config()
+log = logging.getLogger('fc-scraper')
 
 
-class ForeclosureScraper(Scraper):
+def geocode(address):
+    # TODO -- a more open way of doing this.
+    # Here we have to sleep 1 second to make sure google doesn't scold us.
+    time.sleep(1)
+    vals = {'address': address, 'sensor': 'false'}
+    qstr = urllib.urlencode(vals)
+    reqstr = "http://maps.google.com/maps/api/geocode/json?%s" % qstr
+    return simplejson.loads(urllib.urlopen(reqstr).read())
+
+
+class ForeclosureScraper(object):
     """Property Info Mortgage Foreclosure Scraper """
-    topics = ['Economy', 'Foreclosures', 'PropertyInfo']
-    models = [PropertyInfoForeclosure]
-    git_repo = 'propertyinfoforeclosure'
-    frequency = datetime.timedelta(days=1)
-    now = True
     base = 'https://gov.propertyinfo.com'
+    apps_base = 'https://govapps.propertyinfo.com'
     headers = [
             'Index Detail',
             'View Image',
@@ -125,20 +114,26 @@ class ForeclosureScraper(Scraper):
         log.info("Of %i rows.  %i were geocoded and %i failed." % \
                  (len(georows), success, fail))
 
-        # Format the lines.  Comma-separate and enclose in double-quotes.
-        lines = [",".join(["\"%s\"" % h for h in self.headers]) + '\n']
-        lines.extend(
-            [",".join(["\"%s\"" % row[h] for h in self.headers]) + '\n'
-                                                        for row in data])
-        # Save this data out to a .csv
-        f = os.path.join(self.get_repo_dir(), PropertyInfoForeclosure.__csv__)
-        log.debug("Saving to: %s" % f)
-        file = open(f, 'w')
-        file.writelines(lines)
-        file.close()
+        db_data = [
+            dict([
+                (k.replace(' ', '_').lower(), v) for k, v in row.iteritems()
+            ]) for row in data
+        ]
 
-        # Seal the deal
-        self.git_add_and_commit("Updated Property Foreclosures")
+        for row in db_data:
+            row['control_no'] = int(row['control_no'])
+
+        import transaction
+
+        for row in db_data:
+            query = m.Foreclosure.query.filter(
+                m.Foreclosure.control_no==row['control_no'])
+
+            if query.count() == 0:
+                m.DBSession.add(m.Foreclosure(**row))
+
+        transaction.commit()
+
         log.debug("Totally done with foreclosure scraping.")
 
     def go_way_back(self):
@@ -248,7 +243,7 @@ class ForeclosureScraper(Scraper):
             log.debug(" ran out of pages:  %i > %i" % (next_page, total_pages))
             return None
         self.browser.form['currentPage'] = str(next_page)
-        self.browser.form.action = '%s/wam3/SearchResults.asp' % self.base
+        self.browser.form.action = '%s/wam3/SearchResults.asp' % self.apps_base
         self.browser.submit()
 
     def load_results_page(self, beg_date, end_date):
@@ -272,7 +267,7 @@ class ForeclosureScraper(Scraper):
         # TODO -- there are lots of other doc types we can get here.
         self.set_hidden_form_value('SearchDocType',
                               "NOTICE OF PENDENCY MORTGAGE FORECLOSURE")
-        self.browser.form.action = '%s/wam3/SearchSummary.asp' % self.base
+        self.browser.form.action = '%s/wam3/SearchSummary.asp' % self.apps_base
         self.browser.submit()
 
         # Follow an implicit redirect
