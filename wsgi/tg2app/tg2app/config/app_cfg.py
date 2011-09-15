@@ -18,10 +18,10 @@ import os
 from tg.configuration import AppConfig
 from pylons import config
 
-import cron
 import tg2app
 from tg2app import model
 from tg2app.lib import app_globals, helpers
+from tg2app.scrapers.cron import schedule
 
 class OpenShiftConfig(AppConfig):
 
@@ -47,7 +47,7 @@ base_config.renderers = []
 
 base_config.package = tg2app
 
-base_config.call_on_startup = [cron.schedule]
+base_config.call_on_startup = [schedule]
 
 #Enable json in expose
 base_config.renderers.append('json')

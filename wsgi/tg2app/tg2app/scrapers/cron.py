@@ -16,5 +16,11 @@ def schedule():
     log.info("Starting Scheduler Manager")
     start_scheduler()
 
-    add_interval_task(action=testTask, taskname="test1",
-                      interval=5, initialdelay=5)
+    HOUR = 60*60
+
+    add_interval_task(
+        action=testTask,
+        taskname="test1",
+        interval=HOUR,
+        initialdelay=0
+    )
