@@ -22,11 +22,11 @@ def schedule():
     log.info("Starting Scheduler Manager")
     start_scheduler()
 
-    HOUR = 60*60
+    EIGHT_HOURS = 60*60*8
 
     add_interval_task(
         action=ForeclosureScraper().scrape_data,
         taskname="test1",
-        interval=HOUR,
-        initialdelay=0
+        interval=EIGHT_HOURS,
+        initialdelay=15
     )
