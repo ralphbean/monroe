@@ -43,6 +43,7 @@ from civx.scrapers import Scraper
 log = logging.getLogger('moksha.hub')
 config = get_civx_config()
 
+
 class ForeclosureScraper(Scraper):
     """Property Info Mortgage Foreclosure Scraper """
     topics = ['Economy', 'Foreclosures', 'PropertyInfo']
@@ -85,9 +86,9 @@ class ForeclosureScraper(Scraper):
 
         # Sanity
         if (end_date <= beg_date):
-            raise ValueError, "end date must come after begin date"
+            raise ValueError("end date must come after begin date")
         if (end_date - beg_date) > datetime.timedelta(days=15):
-            raise ValueError, "Cannot scrape tdelta > 15 days.  Source hangs."
+            raise ValueError("Cannot scrape tdelta > 15 days.  Source hangs.")
 
         # Setting up our mechanize browser
         self.init_browser()
@@ -140,11 +141,10 @@ class ForeclosureScraper(Scraper):
         self.git_add_and_commit("Updated Property Foreclosures")
         log.debug("Totally done with foreclosure scraping.")
 
-
     def go_way_back(self):
         fdate = datetime.datetime(1989, 1, 1)
         tdate = datetime.datetime.today()
-        step = 7 # in days
+        step = 7  # in days
 
         def date_range(from_date, to_date, step):
             while from_date < to_date:
@@ -154,7 +154,7 @@ class ForeclosureScraper(Scraper):
         for date in date_range(fdate, tdate, step):
             self.scrape_data(
                 beg_date=date,
-                end_date=date + datetime.timedelta(days=(step-1)))
+                end_date=date + datetime.timedelta(days=(step - 1)))
 
     def init_browser(self):
         # TODO -- convert this to use civx.scrapers.get_browser
@@ -167,14 +167,13 @@ class ForeclosureScraper(Scraper):
         self.browser.set_handle_referer(True)
         self.browser.set_handle_robots(False)
 
-
     # Ugly.
     def geodict_from_row(self, row):
         return {
-            self.headers[-4] : row[-4],
-            self.headers[-3] : row[-3],
-            self.headers[-2] : row[-2],
-            self.headers[-1] : row[-1],
+            self.headers[-4]: row[-4],
+            self.headers[-3]: row[-3],
+            self.headers[-2]: row[-2],
+            self.headers[-1]: row[-1],
         }
 
     def make_geocoded_row(self, row):
@@ -190,17 +189,17 @@ class ForeclosureScraper(Scraper):
 
         # The return value is a dict with the last four header entries
         if status != "OK":
-            log.warn( "Geocode: %s, failed '%s'." % (status, addr) )
+            log.warn("Geocode: %s, failed '%s'." % (status, addr))
             return r([False, "(status=%s.  failed to geocode)" % status, 0, 0])
 
         # TODO -- is there anyway to just resolve this now and pick one?
         if len(results) != 1:
-            log.warn( "Geocode: more than one match, failed '%s'." % addr )
+            log.warn("Geocode: more than one match, failed '%s'." % addr)
             return r([False, "(found more than one match)", 0, 0])
 
         result = results[0]
         if not 'street_address' in result['types']:
-            log.warn( "Geocode: ambiguity in resolving '%s'." % addr )
+            log.warn("Geocode: ambiguity in resolving '%s'." % addr)
             return r([False, "(no street_address)", 0, 0])
 
         # A check for weirdness
@@ -213,8 +212,7 @@ class ForeclosureScraper(Scraper):
 
         # We all good.
         loc = result['geometry']['location']
-        return r([ True, result['formatted_address'], loc['lat'], loc['lng'] ])
-
+        return r([True, result['formatted_address'], loc['lat'], loc['lng']])
 
     def parse_results_page(self):
         html = self.browser.response().read()
