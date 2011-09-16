@@ -31,7 +31,7 @@ class Foreclosure(DeclarativeBase):
     """
     __tablename__ = 'foreclosure_table'
 
-    control_no = Column(Integer, primary_key=True)
+    control_no = Column(Unicode(255), nullable=False, primary_key=True)
 
     book = Column(Unicode(255), nullable=False)
     book_page = Column(Unicode(255), nullable=False)

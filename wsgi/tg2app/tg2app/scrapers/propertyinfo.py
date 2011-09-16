@@ -120,8 +120,7 @@ class ForeclosureScraper(object):
             ]) for row in data
         ]
 
-        for row in db_data:
-            row['control_no'] = int(row['control_no'])
+        # TODO -- convert to actual datetimes
 
         import transaction
 
