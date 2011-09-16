@@ -4,7 +4,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import mapper, relation
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import Integer, Unicode, Numeric, Boolean
+from sqlalchemy.types import Integer, Unicode, Float, Boolean
 
 from tg2app.model import DeclarativeBase, metadata, DBSession
 
@@ -42,8 +42,8 @@ class Foreclosure(DeclarativeBase):
     index_detail = Column(Unicode(255), nullable=False)
     instrument_type = Column(Unicode(255), nullable=False)
     land_description = Column(Unicode(255), nullable=False)
-    latitude = Column(Numeric, nullable=False)
-    longitude = Column(Numeric, nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
     map_ready = Column(Boolean, nullable=False)
     property_address = Column(Unicode(255), nullable=False)
     reference_1 = Column(Unicode(255), nullable=False)
