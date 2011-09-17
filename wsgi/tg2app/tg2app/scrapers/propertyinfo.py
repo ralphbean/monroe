@@ -120,7 +120,9 @@ class ForeclosureScraper(object):
             ]) for row in data
         ]
 
-        # TODO -- convert to actual datetimes
+        for i in range(len(db_data)):
+            db_data[i]['filing_date'] = datetime.datetime.strptime(
+                db_data[i]['filing_date'], '%m/%d/%Y')
 
         import transaction
 
@@ -136,9 +138,12 @@ class ForeclosureScraper(object):
         log.debug("Totally done with foreclosure scraping.")
 
     def go_way_back(self):
-        fdate = datetime.datetime(1989, 1, 1)
+        fdate = datetime.datetime(1989, 4, 1)
         tdate = datetime.datetime.today()
+        fmt = '%m/%d/%Y'
         step = 7  # in days
+        log.info("Running the go_way_back robot from %s to %s." %
+                  (fdate.strftime(fmt), tdate.strftime(fmt)))
 
         def date_range(from_date, to_date, step):
             while from_date < to_date:
@@ -149,6 +154,9 @@ class ForeclosureScraper(object):
             self.scrape_data(
                 beg_date=date,
                 end_date=date + datetime.timedelta(days=(step - 1)))
+
+            # Here we'll just sleep a little bit so we don't piss anyone off
+            time.sleep(5)
 
     def init_browser(self):
         # TODO -- convert this to use civx.scrapers.get_browser
@@ -184,7 +192,7 @@ class ForeclosureScraper(object):
         # The return value is a dict with the last four header entries
         if status != "OK":
             log.warn("Geocode: %s, failed '%s'." % (status, addr))
-            return r([False, "(status=%s.  failed to geocode)" % status, 0, 0])
+            return r([False, status, 0, 0])
 
         # TODO -- is there anyway to just resolve this now and pick one?
         if len(results) != 1:

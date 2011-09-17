@@ -4,7 +4,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import mapper, relation
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import Integer, Unicode, Float, Boolean
+from sqlalchemy.types import Integer, Unicode, Float, Boolean, DateTime
 
 from tg2app.model import DeclarativeBase, metadata, DBSession
 
@@ -35,7 +35,7 @@ class Foreclosure(DeclarativeBase):
 
     book = Column(Unicode(255), nullable=False)
     book_page = Column(Unicode(255), nullable=False)
-    filing_date = Column(Unicode(255), nullable=False)      # TODO -- datetime?
+    filing_date = Column(DateTime, nullable=False)
     formatted_address = Column(Unicode(255), nullable=False)
     grantee = Column(Unicode(255), nullable=False)
     grantor = Column(Unicode(255), nullable=False)
