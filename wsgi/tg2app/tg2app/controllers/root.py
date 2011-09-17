@@ -61,6 +61,22 @@ class RootController(BaseController):
     def grantee(self, top=5):
         return self._granted('grantee', top)
 
+    @expose('tg2app.templates.widget')
+    def day(self):
+        return self._time('day')
+
+    @expose('tg2app.templates.widget')
+    def month(self):
+        return self._time('month')
+
+    @expose('tg2app.templates.widget')
+    def year(self):
+        return self._time('year')
+
+    @expose('tg2app.templates.widget')
+    def dayofweek(self):
+        return self._time('dayofweek')
+
     def _granted(self, attr, top):
         if not attr in ['grantor', 'grantee']:
             redirect('/')
@@ -81,6 +97,42 @@ class RootController(BaseController):
 
         bucket = dict(items[:top])
         bucket['OTHER'] = sum([item[1] for item in items[top:]])
+
+        p_data = {
+            'labels' : ['Foreclosures'],
+            'values' : [
+                {
+                    'label': key,
+                    'values': [value],
+                } for key, value in bucket.iteritems()
+            ]
+        }
+
+        class pie(tw2.jit.PieChart):
+            id = 'foreclosure_pie'
+            data = p_data
+            sliceOffset = 5
+
+        return dict(widget=pie)
+
+    def _time(self, attr):
+        lookup = {
+            'day': '%d',
+            'month': '%b',
+            'year': '%Y',
+            'dayofweek': '%a',
+        }
+
+        if attr not in lookup.keys():
+            redirect('/')
+
+        closures = model.Foreclosure.query.all()
+
+        fmt = lookup[attr]
+        bucket = {}
+        for c in closures:
+            bucket[c.filing_date.strftime(fmt)] = \
+                    bucket.get(c.filing_date.strftime(fmt), 0) + 1
 
         p_data = {
             'labels' : ['Foreclosures'],

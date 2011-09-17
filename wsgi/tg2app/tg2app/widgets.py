@@ -79,8 +79,17 @@ class MainMenu(MenuWidget):
             'label': 'By Grantee',
             'href': loading_dialog('/grantee'),
         }, {
-            'label': 'By Time',
-            'href': loading_dialog('/time'),
+            'label': 'By Weekday',
+            'href': loading_dialog('/dayofweek'),
+        }, {
+            'label': 'By Day',
+            'href': loading_dialog('/day'),
+        }, {
+            'label': 'By Month',
+            'href': loading_dialog('/month'),
+        }, {
+            'label': 'By Year',
+            'href': loading_dialog('/year'),
         }, {
             'label': 'Graph',
             'href': loading_dialog('/graph'),
