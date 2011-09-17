@@ -205,6 +205,13 @@ class ForeclosureScraper(object):
         entry = geocode(addr)
         status, results = entry['status'], entry['results']
 
+        # This is bad news.
+        if status == 'OVER_QUERY_LIMIT':
+            log.warn("Geocode: WHOAH.. over query limit.  Sleeping 24 hours.")
+            time.sleep(86500)
+            log.warn("Geocode: Okay.. resuming.")
+            return self.make_geocoded_row(row)
+
         # The return value is a dict with the last four header entries
         if status != "OK":
             log.warn("Geocode: %s, failed '%s'." % (status, addr))
