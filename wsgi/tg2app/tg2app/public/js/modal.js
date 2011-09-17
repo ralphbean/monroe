@@ -3,7 +3,7 @@ function loadingDialog(href) {
         .html('Loading.')
         .dialog({
                 autoOpen: true,
-                title: 'Monroe County Foreclosures',
+                title: 'Monroe Foreclosures',
                 modal: true,
         });
         window.location.href=href

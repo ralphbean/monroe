@@ -19,15 +19,15 @@ class ForeclosureGrid(SQLAjqGridWidget):
         'reference_2',
         'view_image',
     ]
-    datetime_format = "%x %X"
+    datetime_format = "%x"
 
     prmFilter = {'stringResult': True, 'searchOnEnter': False}
 
     options = {
         'pager': 'foreclosure-loggrid_pager',
         'url': '/jqgrid/',
-        'rowNum':15,
-        'rowList':[15,150, 1500],
+        'rowNum':30,
+        'rowList':[30, 100, 500, 1000, 2000, 5000],
         'viewrecords':True,
         'imgpath': 'scripts/jqGrid/themes/green/images',
         'shrinkToFit': True,
@@ -51,7 +51,7 @@ class MainMenu(MenuWidget):
             'label' : 'By Time',
             'href' : loading_dialog('/time'),
         },{
-            'label' : 'By Grantor/Grantee',
+            'label' : 'By Grantor',
             'href' : loading_dialog('/grantor'),
         },{
             'label' : 'Graph',
