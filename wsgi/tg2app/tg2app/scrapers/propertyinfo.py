@@ -84,14 +84,14 @@ class ForeclosureScraper(object):
         self.init_browser()
 
         # Start workin'
-        log.info("Scraping foreclosures from %s to %s." %
+        log.warn("Scraping foreclosures from %s to %s." %
                   (beg_date.strftime(fmt), end_date.strftime(fmt)))
         self.load_results_page(beg_date.strftime(fmt), end_date.strftime(fmt))
         for i in range(1, self.get_total_pages() + 1):
             self.load_page_number(i)
             rows = self.parse_results_page()
             data.extend(rows)
-        log.info("Found %i rows of foreclosure data." % len(data))
+        log.warn("Found %i rows of foreclosure data." % len(data))
         self.browser.close()
         self.browser = None
 
@@ -101,7 +101,7 @@ class ForeclosureScraper(object):
             return
 
         # Geocode each row
-        log.info("Geocoding each foreclosure address (may take a while).")
+        log.warn("Geocoding each foreclosure address (may take a while).")
         georows = [self.make_geocoded_row(row) for row in data]
         for i in range(len(data)):
             for header in self.headers[-4:]:
