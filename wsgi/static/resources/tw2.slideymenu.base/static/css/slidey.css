@@ -1,0 +1,21 @@
+.slidey-menu-button {
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+        position: absolute;
+        left: -45px;
+        top: 33%;
+        z-index: 100;
+}
+
+.slidey-menu-menu {
+        position: absolute;
+        top: 15%;
+        left:-5px;
+        padding: 10px;
+        padding-top -5px;
+        padding-bottom -5px;
+        z-index: 101;
+}
+
