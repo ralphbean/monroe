@@ -197,9 +197,6 @@ class ForeclosureScraper(object):
     def make_geocoded_row(self, row):
         r = self.geodict_from_row
 
-        # Constant
-        bplate = "an address from propertyinfo.com.  Check this out in the DB."
-
         # Entry is the pythonified json obj returned by Google's geocoding serv
         addr = row['Property Address']
         entry = geocode(addr)
