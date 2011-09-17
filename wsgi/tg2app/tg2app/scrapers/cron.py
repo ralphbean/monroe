@@ -21,11 +21,11 @@ def schedule():
 
     ONE_DAY = 60*60*24
 
-#    add_single_task(
-#        action=ForeclosureScraper().go_way_back,
-#        taskname="gowayback",
-#        initialdelay=60,
-#    )
+    add_single_task(
+        action=ForeclosureScraper().go_way_back,
+        taskname="gowayback",
+        initialdelay=60,
+    )
     add_interval_task(
         action=ForeclosureScraper().scrape_data,
         taskname="test1",
