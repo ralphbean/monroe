@@ -133,6 +133,8 @@ class ForeclosureScraper(object):
 
             if query.count() == 0:
                 m.DBSession.add(m.Foreclosure(**row))
+            else:
+                log.warn("'%s' already in DB.  Skipping." % row['control_no'])
 
         transaction.commit()
 
