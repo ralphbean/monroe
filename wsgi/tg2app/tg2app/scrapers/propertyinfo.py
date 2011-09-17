@@ -99,6 +99,15 @@ class ForeclosureScraper(object):
         self.browser.close()
         self.browser = None
 
+        def already_in_db(row):
+            print row.keys()
+            query = m.Foreclosure.query.filter(
+                m.Foreclosure.control_no==row['Control No'])
+            return query.count() == 1
+
+        data = [row for row in data if not already_in_db(row)]
+        log.warn("%i of those rows are not in the db." % len(data))
+
         # Is this the right move?  Maybe CIVX won't notice me.
         if len(data) == 0:
             log.warn("Skipping out early.  No rows found.")
