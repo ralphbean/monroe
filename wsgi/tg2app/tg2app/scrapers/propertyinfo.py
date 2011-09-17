@@ -166,12 +166,15 @@ class ForeclosureScraper(object):
                 from_date = from_date + datetime.timedelta(days=step)
 
         for date in date_range(fdate, tdate, step):
+            log.warn("Starting wayback scrape.")
             self.scrape_data(
                 beg_date=date,
                 end_date=date + datetime.timedelta(days=(step - 1)))
+            log.warn("Done with wayback scrape.  Sleeping.")
 
             # Here we'll just sleep a little bit so we don't piss anyone off
             time.sleep(5)
+            log.warn("Waking up.")
 
     def init_browser(self):
         # TODO -- convert this to use civx.scrapers.get_browser
