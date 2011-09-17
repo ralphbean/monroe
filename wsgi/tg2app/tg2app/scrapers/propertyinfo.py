@@ -100,7 +100,6 @@ class ForeclosureScraper(object):
         self.browser = None
 
         def already_in_db(row):
-            print row.keys()
             query = m.Foreclosure.query.filter(
                 m.Foreclosure.control_no==row['Control No'])
             return query.count() == 1
