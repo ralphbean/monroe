@@ -55,16 +55,26 @@ class RootController(BaseController):
 
     @expose('tg2app.templates.widget')
     def grantor(self, top=5):
+        return self._granted('grantor', top)
+
+    @expose('tg2app.templates.widget')
+    def grantee(self, top=5):
+        return self._granted('grantee', top)
+
+    def _granted(self, attr, top):
+        if not attr in ['grantor', 'grantee']:
+            redirect('/')
+
         try:
             top = int(top)
         except TypeError:
-            redirect('/grantor')
+            redirect('/' + attr)
 
         closures = model.Foreclosure.query.all()
 
         bucket = {}
         for c in closures:
-            bucket[c.grantor] = bucket.get(c.grantor, 0) + 1
+            bucket[getattr(c, attr)] = bucket.get(getattr(c, attr), 0) + 1
 
         items = bucket.items()
         items.sort(lambda a, b: cmp(b[1], a[1]))

@@ -73,11 +73,14 @@ class MainMenu(MenuWidget):
             'label': 'Grid',
             'href': loading_dialog('/grid'),
         }, {
-            'label': 'By Time',
-            'href': loading_dialog('/time'),
-        }, {
             'label': 'By Grantor',
             'href': loading_dialog('/grantor'),
+        }, {
+            'label': 'By Grantee',
+            'href': loading_dialog('/grantee'),
+        }, {
+            'label': 'By Time',
+            'href': loading_dialog('/time'),
         }, {
             'label': 'Graph',
             'href': loading_dialog('/graph'),
