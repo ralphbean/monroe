@@ -26,13 +26,14 @@ class ForeclosureGrid(SQLAjqGridWidget):
     options = {
         'pager': 'foreclosure-loggrid_pager',
         'url': '/jqgrid/',
-        'rowNum':30,
-        'rowList':[30, 100, 500, 1000, 2000, 5000],
-        'viewrecords':True,
+        'rowNum': 30,
+        'rowList': [30, 100, 500, 1000, 2000, 5000],
+        'viewrecords': True,
         'imgpath': 'scripts/jqGrid/themes/green/images',
         'shrinkToFit': True,
         'height': 'auto',
     }
+
 
 def loading_dialog(href):
     return "javascript:loadingDialog('%s');" % href
@@ -40,27 +41,28 @@ def loading_dialog(href):
 modal_js = twc.JSLink(modname=__name__,
                       filename='public/js/modal.js')
 
+
 class MainMenu(MenuWidget):
     resources = MenuWidget.resources + [modal_js]
-    id='foreclosure-menu'
-    items=[
+    id = 'foreclosure-menu'
+    items = [
         {
-            'label' : 'Grid',
-            'href' : loading_dialog('/grid'),
-        },{
-            'label' : 'By Time',
-            'href' : loading_dialog('/time'),
-        },{
-            'label' : 'By Grantor',
-            'href' : loading_dialog('/grantor'),
-        },{
-            'label' : 'Graph',
-            'href' : loading_dialog('/graph'),
+            'label': 'Grid',
+            'href': loading_dialog('/grid'),
         }, {
-            'label' : 'Map',
-            'href' : loading_dialog('/map'),
-        },{
-            'label' : 'Export (.csv)',
-            'href' : loading_dialog('/export'),
+            'label': 'By Time',
+            'href': loading_dialog('/time'),
+        }, {
+            'label': 'By Grantor',
+            'href': loading_dialog('/grantor'),
+        }, {
+            'label': 'Graph',
+            'href': loading_dialog('/graph'),
+        }, {
+            'label': 'Map',
+            'href': loading_dialog('/map'),
+        }, {
+            'label': 'Export (.csv)',
+            'href': loading_dialog('/export'),
         }
     ]
