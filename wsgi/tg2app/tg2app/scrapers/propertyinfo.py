@@ -88,9 +88,13 @@ class ForeclosureScraper(object):
                   (beg_date.strftime(fmt), end_date.strftime(fmt)))
         self.load_results_page(beg_date.strftime(fmt), end_date.strftime(fmt))
         for i in range(1, self.get_total_pages() + 1):
-            self.load_page_number(i)
-            rows = self.parse_results_page()
-            data.extend(rows)
+            try:
+                self.load_page_number(i)
+                rows = self.parse_results_page()
+                data.extend(rows)
+            except Exception as e:
+                log.warn("Failed unexpectedly on page %i" % i)
+                log.warn(str(e))
         log.warn("Found %i rows of foreclosure data." % len(data))
         self.browser.close()
         self.browser = None
