@@ -9,6 +9,7 @@ Author
 ------
 
 Ralph Bean <ralph.bean@gmail.com>
+
 Member, International Socialist Organization
 
 License
@@ -27,7 +28,6 @@ Views
  - By Grantor/Grantee
  - By day of week, month, year
  - Map by today, week, month, year, 5 years
- - TODO linkage
  - Finish README
 
 Hosting

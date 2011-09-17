@@ -50,6 +50,7 @@ setup(
         "repoze.who==1.0.19",
         "tgext.admin >= 0.3.9",
         "mechanize",
+        "docutils",
         "tw2.jqplugins.jqgrid",
         "tw2.slideymenu",
         "BeautifulSoup",

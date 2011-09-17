@@ -1,7 +1,30 @@
 import tg2app.model as model
 import tw2.core as twc
 from tw2.jqplugins.jqgrid import SQLAjqGridWidget
+from tw2.jqplugins.ui import DialogWidget
 from tw2.slideymenu import MenuWidget
+
+import docutils.examples
+
+
+def foreclosure_readme():
+    """ Ridiculous """
+    root = '/'.join(__file__.split('/')[:-2])
+    fname = root + '/README.rst'
+    with open(fname, 'r') as f:
+        readme = f.read()
+        return docutils.examples.html_body(unicode(readme))
+
+
+class ReadmeDialog(DialogWidget):
+    id = 'foreclosure_dialog'
+    options = {
+        'title': 'README.rst',
+        'autoOpen': False,
+        'width': 1000
+    }
+    value = foreclosure_readme()
+
 
 class ForeclosureGrid(SQLAjqGridWidget):
     id = 'foreclosure-loggrid'
@@ -64,5 +87,8 @@ class MainMenu(MenuWidget):
         }, {
             'label': 'Export (.csv)',
             'href': loading_dialog('/export'),
+        }, {
+            'label': 'About',
+            'href': "javascript:(function(){$('#foreclosure_dialog').dialog('open');})();"
         }
     ]

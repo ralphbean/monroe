@@ -10,7 +10,7 @@ import tg2app.model as model
 
 from tw2.jqplugins.ui import set_ui_theme_name
 
-from tg2app.widgets import MainMenu
+from tg2app.widgets import MainMenu, ReadmeDialog
 
 __all__ = ['BaseController']
 
@@ -34,6 +34,7 @@ class BaseController(TGController):
         tmpl_context.identity = request.identity
 
         tmpl_context.menu_widget = MainMenu
+        tmpl_context.dialog_widget = ReadmeDialog
         set_ui_theme_name('hot-sneaks')
 
         return TGController.__call__(self, environ, start_response)
