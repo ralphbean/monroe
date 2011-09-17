@@ -51,6 +51,7 @@ setup(
         "tgext.admin >= 0.3.9",
         "mechanize",
         "tw2.jqplugins.jqgrid",
+        "tw2.slideymenu",
         "BeautifulSoup",
         ],
     setup_requires=["PasteScript >= 1.7"],

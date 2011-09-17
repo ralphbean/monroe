@@ -8,6 +8,10 @@ from tg import request
 from tg.i18n import ugettext as _, ungettext
 import tg2app.model as model
 
+from tw2.jqplugins.ui import set_ui_theme_name
+
+from tg2app.widgets import MainMenu
+
 __all__ = ['BaseController']
 
 
@@ -28,4 +32,8 @@ class BaseController(TGController):
 
         request.identity = request.environ.get('repoze.who.identity')
         tmpl_context.identity = request.identity
+
+        tmpl_context.menu_widget = MainMenu
+        set_ui_theme_name('hot-sneaks')
+
         return TGController.__call__(self, environ, start_response)

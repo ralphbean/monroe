@@ -42,7 +42,7 @@ class RootController(BaseController):
     @expose('tg2app.templates.index')
     def index(self):
         """Handle the front-page."""
-        return dict(page='index')
+        redirect('/grid')
 
     @expose('json')
     def jqgrid(self, *args, **kwargs):
