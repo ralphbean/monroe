@@ -24,7 +24,8 @@ import tg2app.model as m
 from BeautifulSoup import BeautifulSoup
 from tg import config
 
-log = logging.getLogger('tgscheduler.kronos')
+logging.basicConfig()
+log = logging.getLogger('fc-scrape')
 
 
 def geocode(address):
