@@ -16,6 +16,8 @@ License
 
 AGPL
 
+Get the source at https://github.com/ralphbean/monroe
+
 TODO
 ----
 
@@ -32,7 +34,7 @@ Hosting
 -------
 
 This app is hosted on redhat's openshift cloudliness.  Specifically at
-`http://monroe-threebean.rhcloud.com/`_.
+http://monroe-threebean.rhcloud.com/.
 
 * Create an account at http://openshift.redhat.com/
 
