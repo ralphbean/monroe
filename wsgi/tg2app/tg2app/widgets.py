@@ -3,7 +3,7 @@ import tw2.core as twc
 from tw2.jqplugins.jqgrid import SQLAjqGridWidget
 from tw2.jqplugins.ui import DialogWidget
 from tw2.slideymenu import MenuWidget
-from tw2.jit import PieChart
+from tw2.jit import PieChart, AreaChart
 
 import docutils.examples
 
@@ -106,9 +106,9 @@ class MainMenu(MenuWidget):
         }
     ]
 
-class ForeclosurePie(PieChart):
-    id = 'foreclosure_pie'
-    sliceOffset = 10
+
+class JitCustomized(object):
+    id = 'foreclosure_widget'
     width = '1000'
     height = '600'
     backgroundcolor = '#f9f9f9'
@@ -117,3 +117,10 @@ class ForeclosurePie(PieChart):
         'color': '#3e3e3e',
     }
 
+
+class ForeclosureArea(JitCustomized, AreaChart):
+    pass
+
+
+class ForeclosurePie(JitCustomized, PieChart):
+    sliceOffset = 10

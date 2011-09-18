@@ -24,9 +24,6 @@ TODO
 
 Views
 
- - Over time
- - By Grantor/Grantee
- - By day of week, month, year
  - Map by today, week, month, year, 5 years
  - Finish README
 

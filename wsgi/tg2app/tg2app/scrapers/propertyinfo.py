@@ -27,6 +27,12 @@ from tg import config
 logging.basicConfig()
 log = logging.getLogger('fc-scrape')
 
+def date_range(from_date, to_date, step):
+    """ Utility to produce a date range """
+    while from_date < to_date:
+        yield from_date
+        from_date = from_date + datetime.timedelta(days=step)
+
 
 def geocode(address):
     # TODO -- a more open way of doing this.
@@ -171,11 +177,6 @@ class ForeclosureScraper(object):
         step = 7  # in days
         log.info("Running the go_way_back robot from %s to %s." %
                   (fdate.strftime(fmt), tdate.strftime(fmt)))
-
-        def date_range(from_date, to_date, step):
-            while from_date < to_date:
-                yield from_date
-                from_date = from_date + datetime.timedelta(days=step)
 
         for date in date_range(fdate, tdate, step):
             log.warn("Starting wayback scrape.")

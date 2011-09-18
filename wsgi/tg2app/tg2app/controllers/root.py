@@ -14,8 +14,13 @@ from tg2app.controllers.secure import SecureController
 
 from tg2app.controllers.error import ErrorController
 
-from tg2app.widgets import ForeclosureGrid, ForeclosurePie
+from tg2app.scrapers.propertyinfo import date_range  # A nice utility.
+from tg2app.widgets import ForeclosureGrid, ForeclosurePie, ForeclosureArea
 import tw2.jit
+
+from sqlalchemy import and_
+
+import datetime
 
 __all__ = ['RootController']
 
@@ -44,6 +49,40 @@ class RootController(BaseController):
     def index(self):
         """Handle the front-page."""
         redirect('/grid')
+
+    @expose('tg2app.templates.widget')
+    def graph(self, *args, **kwargs):
+
+        bucket = {}
+        step = datetime.timedelta(days=365)
+        for date in date_range(
+            datetime.datetime(1989, 1, 1),
+            datetime.datetime.now(),
+            step=365,
+        ):
+            query = model.Foreclosure.query.filter(
+                and_(
+                    model.Foreclosure.filing_date >= date,
+                    model.Foreclosure.filing_date < date + step
+                ))
+            bucket[date.strftime("%Y")] = query.count()
+
+        items = bucket.items()
+        items.sort(lambda a, b: cmp(a[0], b[0]))
+
+        data = {
+            'labels' : ['Foreclosures'],
+            'values' : [
+                {
+                    'label': key,
+                    'values': [value],
+                } for key, value in items
+            ]
+        }
+
+        graph = ForeclosureArea(data=data)
+
+        return dict(widget=graph)
 
     @expose('json')
     def jqgrid(self, *args, **kwargs):
