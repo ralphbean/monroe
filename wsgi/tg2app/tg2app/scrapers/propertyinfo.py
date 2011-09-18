@@ -94,7 +94,7 @@ class ForeclosureScraper(object):
             self.load_results_page(beg_date.strftime(fmt),
                                    end_date.strftime(fmt))
         except Exception as e:
-            log.warn("Failed unexpectedly on page %i" % i)
+            log.warn("Failed unexpectedly loading initial results page.")
             log.warn(str(e))
             log.warn("Trying again.")
             return self.scrape_data(beg_date, end_date, tries+1)
