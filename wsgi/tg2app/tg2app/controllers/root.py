@@ -48,7 +48,7 @@ class RootController(BaseController):
     @expose('tg2app.templates.index')
     def index(self):
         """Handle the front-page."""
-        redirect('/grid')
+        redirect('/graph')
 
     @expose('tg2app.templates.widget')
     def graph(self, *args, **kwargs):
