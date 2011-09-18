@@ -76,6 +76,12 @@ setup(
 
     [paste.app_install]
     main = pylons.util:PylonsInstaller
+
+    [tw2.widgets]
+    # Register your widgets so they can be listed in the
+    # WidgetBrowser
+    tg2app.widgets = tg2app.widgets
+
     """,
     dependency_links=[
         "http://www.turbogears.org/2.1/downloads/current/"
