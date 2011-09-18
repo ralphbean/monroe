@@ -63,7 +63,11 @@ class ForeclosureScraper(object):
             'Longitude',
     ]
 
-    def scrape_data(self, beg_date=None, end_date=None):
+    def scrape_data(self, beg_date=None, end_date=None, tries=0):
+
+        if tries > 3:
+            raise ValueError, "Tried 3 times already.. failing!"
+
         # Some initialization
         data = []
         fmt = '%m/%d/%Y'
@@ -86,7 +90,15 @@ class ForeclosureScraper(object):
         # Start workin'
         log.warn("Scraping foreclosures from %s to %s." %
                   (beg_date.strftime(fmt), end_date.strftime(fmt)))
-        self.load_results_page(beg_date.strftime(fmt), end_date.strftime(fmt))
+        try:
+            self.load_results_page(beg_date.strftime(fmt),
+                                   end_date.strftime(fmt))
+        except Exception as e:
+            log.warn("Failed unexpectedly on page %i" % i)
+            log.warn(str(e))
+            log.warn("Trying again.")
+            return self.scrape_data(beg_date, end_date, tries+1)
+
         for i in range(1, self.get_total_pages() + 1):
             try:
                 self.load_page_number(i)
