@@ -21,6 +21,10 @@
 #content {
 	padding-left: 30px;
 }
+
+body {
+	background-color: f9f9f9;
+}
 </style>
 
 </head>

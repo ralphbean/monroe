@@ -14,7 +14,7 @@ from tg2app.controllers.secure import SecureController
 
 from tg2app.controllers.error import ErrorController
 
-from tg2app.widgets import ForeclosureGrid
+from tg2app.widgets import ForeclosureGrid, ForeclosurePie
 import tw2.jit
 
 __all__ = ['RootController']
@@ -94,11 +94,13 @@ class RootController(BaseController):
 
         items = bucket.items()
         items.sort(lambda a, b: cmp(b[1], a[1]))
+        items = [(item[0] + "(%i)" % item[1], item[1]) for item in items]
 
         bucket = dict(items[:top])
-        bucket['OTHER'] = sum([item[1] for item in items[top:]])
+        other_count = sum([item[1] for item in items[top:]])
+        bucket['OTHER (%i)' % other_count] = other_count
 
-        p_data = {
+        data = {
             'labels' : ['Foreclosures'],
             'values' : [
                 {
@@ -108,10 +110,7 @@ class RootController(BaseController):
             ]
         }
 
-        class pie(tw2.jit.PieChart):
-            id = 'foreclosure_pie'
-            data = p_data
-            sliceOffset = 5
+        pie = ForeclosurePie(data=data)
 
         return dict(widget=pie)
 
@@ -134,7 +133,12 @@ class RootController(BaseController):
             bucket[c.filing_date.strftime(fmt)] = \
                     bucket.get(c.filing_date.strftime(fmt), 0) + 1
 
-        p_data = {
+        items = bucket.items()
+        items = [(item[0] + "(%i)" % item[1], item[1]) for item in items]
+
+        bucket = dict(items)
+
+        data = {
             'labels' : ['Foreclosures'],
             'values' : [
                 {
@@ -144,9 +148,6 @@ class RootController(BaseController):
             ]
         }
 
-        class pie(tw2.jit.PieChart):
-            id = 'foreclosure_pie'
-            data = p_data
-            sliceOffset = 5
+        pie = ForeclosurePie(data=data)
 
         return dict(widget=pie)

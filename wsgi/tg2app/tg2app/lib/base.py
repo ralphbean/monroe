@@ -35,6 +35,6 @@ class BaseController(TGController):
 
         tmpl_context.menu_widget = MainMenu
         tmpl_context.dialog_widget = ReadmeDialog
-        set_ui_theme_name('hot-sneaks')
+        set_ui_theme_name('excite-bike')
 
         return TGController.__call__(self, environ, start_response)
