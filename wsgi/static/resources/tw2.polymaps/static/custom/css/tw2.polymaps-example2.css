@@ -1,0 +1,16 @@
+svg {
+        width: 100%;
+        height: 100%;
+}
+
+.sample-tw2-polymaps-container-2 {
+        width: 600px;
+        height: 600px;
+}
+
+.layer circle {
+  fill: lawngreen;
+  fill-opacity: .5;
+  stroke: green;
+  vector-effect: non-scaling-stroke;
+}
