@@ -9,8 +9,6 @@ from tg2app.lib.base import BaseController
 from tg2app.model import DBSession, metadata
 from tg2app import model
 
-from tg2app.controllers.error import ErrorController
-
 from tg2app.scrapers.propertyinfo import date_range  # A nice utility.
 from tg2app.widgets import ForeclosureGrid, ForeclosurePie, ForeclosureArea
 import tw2.jit
@@ -40,8 +38,6 @@ class RootController(BaseController):
 
     """
 
-    error = ErrorController()
-
     @expose('')
     def make_wayback_happen(self):
         add_single_task(
@@ -59,6 +55,12 @@ class RootController(BaseController):
     def index(self):
         """Handle the front-page."""
         redirect('/graph')
+
+    @expose(content_type='text/csv')
+    def export(self):
+        header = '|'.join(model.Foreclosure.query.first().csv_headers()) + '\n'
+        closures = model.Foreclosure.query.all()
+        return header + '\n'.join([closure.to_csv() for closure in closures])
 
     @expose('tg2app.templates.widget')
     def graph(self, *args, **kwargs):

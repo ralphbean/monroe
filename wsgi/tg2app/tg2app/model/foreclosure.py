@@ -3,6 +3,7 @@
 
 from sqlalchemy import *
 from sqlalchemy.orm import mapper, relation
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import Integer, Unicode, Float, Boolean, DateTime
 
@@ -49,3 +50,16 @@ class Foreclosure(DeclarativeBase):
     reference_1 = Column(Unicode(255), nullable=False)
     reference_2 = Column(Unicode(255), nullable=False)
     view_image = Column(Unicode(255), nullable=False)
+
+
+    def csv_headers(self):
+        return [
+            key for key, value in Foreclosure.__dict__.iteritems()
+            if type(getattr(Foreclosure, key)) == InstrumentedAttribute
+        ]
+
+
+    def to_csv(self):
+        return "|".join([
+            str(getattr(self, attr)) for attr in self.csv_headers()
+        ])

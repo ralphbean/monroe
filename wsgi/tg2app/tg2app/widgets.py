@@ -99,7 +99,7 @@ class MainMenu(MenuWidget):
             'href': loading_dialog('/map'),
         }, {
             'label': 'Export (.csv)',
-            'href': loading_dialog('/export'),
+            'href': loading_dialog('/export.csv'),
         }, {
             'label': 'About',
             'href': "javascript:(function(){$('#foreclosure_dialog').dialog('open');})();"
