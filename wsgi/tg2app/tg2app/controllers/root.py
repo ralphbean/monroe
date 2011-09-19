@@ -97,7 +97,7 @@ class RootController(BaseController):
                     model.Foreclosure.filing_date >= date,
                     model.Foreclosure.filing_date < date + step
                 ))
-            bucket[date.strftime("%Y")] = query.count()
+            bucket[(date+step).strftime("%Y")] = query.count()
 
         items = bucket.items()
         items.sort(lambda a, b: cmp(a[0], b[0]))
