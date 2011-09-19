@@ -15,8 +15,8 @@ Paul Krugman `writes in the NYT
 
   An epic housing bust and sustained high unemployment have led to an epidemic of
   default, with millions of homeowners falling behind on mortgage payments. So
-  servicers — the companies that collect payments on behalf of mortgage owners
-  — have been foreclosing on many mortgages, seizing many homes.
+  servicers - the companies that collect payments on behalf of mortgage owners
+  - have been foreclosing on many mortgages, seizing many homes.
 
   But do they actually have the right to seize these homes? Horror stories have
   been proliferating, like the case of the Florida man whose home was taken even
@@ -24,31 +24,31 @@ Paul Krugman `writes in the NYT
   ignoring the law. Courts have been approving foreclosures without requiring
   that mortgage servicers produce appropriate documentation; instead, they have
   relied on affidavits asserting that the papers are in order. And these
-  affidavits were often produced by “robo-signers,” or low-level employees
+  affidavits were often produced by "robo-signers," or low-level employees
   who had no idea whether their assertions were true.
 
   Now an awful truth is becoming apparent: In many cases, the documentation
-  doesn’t exist. In the frenzy of the bubble, much home lending was undertaken
+  doesn't exist. In the frenzy of the bubble, much home lending was undertaken
   by fly-by-night companies trying to generate as much volume as possible.
-  These loans were sold off to mortgage “trusts,” which, in turn, sliced and
+  These loans were sold off to mortgage "trusts," which, in turn, sliced and
   diced them into mortgage-backed securities. The trusts were legally required
-  to obtain and hold the mortgage notes that specified the borrowers’
-  obligations. But it’s now apparent that such niceties were frequently
+  to obtain and hold the mortgage notes that specified the borrowers'
+  obligations. But it's now apparent that such niceties were frequently
   neglected. And this means that many of the foreclosures now taking place
   are, in fact, illegal.
 
-  This is very, very bad. For one thing, it’s a near certainty that
-  significant numbers of borrowers are being defrauded — charged fees they
-  don’t actually owe, declared in default when, by the terms of their loan
-  agreements, they aren’t.
+  This is very, very bad. For one thing, it's a near certainty that
+  significant numbers of borrowers are being defrauded - charged fees they
+  don't actually owe, declared in default when, by the terms of their loan
+  agreements, they aren't.
 
-  Beyond that, if trusts can’t produce proof that they actually own the
+  Beyond that, if trusts can't produce proof that they actually own the
   mortgages against which they have been selling claims, the sponsors of
-  these trusts will face lawsuits from investors who bought these claims —
+  these trusts will face lawsuits from investors who bought these claims -
   claims that are now, in many cases, worth only a small fraction of their
   face value.
 
-  And who are these sponsors? Major financial institutions — the same
+  And who are these sponsors? Major financial institutions - the same
   institutions supposedly rescued by government programs last year. So
   the mortgage mess threatens to produce another financial crisis.
 
