@@ -14,6 +14,7 @@ import datetime
 import logging
 import mechanize
 import os
+import random
 import re
 import simplejson
 import time
@@ -186,7 +187,7 @@ class ForeclosureScraper(object):
             log.warn("Done with wayback scrape.  Sleeping.")
 
             # Here we'll just sleep a little bit so we don't piss anyone off
-            time.sleep(5)
+            time.sleep(5 + 5 (random.random() + 1))
             log.warn("Waking up.")
 
     def init_browser(self):
