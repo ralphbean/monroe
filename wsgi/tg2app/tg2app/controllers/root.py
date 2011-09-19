@@ -3,14 +3,11 @@
 
 from tg import expose, flash, require, url, request, redirect
 from tg.i18n import ugettext as _, lazy_ugettext as l_
-from tgext.admin.tgadminconfig import TGAdminConfig
-from tgext.admin.controller import AdminController
 from repoze.what import predicates
 
 from tg2app.lib.base import BaseController
 from tg2app.model import DBSession, metadata
 from tg2app import model
-from tg2app.controllers.secure import SecureController
 
 from tg2app.controllers.error import ErrorController
 
@@ -42,9 +39,6 @@ class RootController(BaseController):
     must be wrapped around with :class:`tg.controllers.WSGIAppController`.
 
     """
-    secc = SecureController()
-
-    admin = AdminController(model, DBSession, config_type=TGAdminConfig)
 
     error = ErrorController()
 
