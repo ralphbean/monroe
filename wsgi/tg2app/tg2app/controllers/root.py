@@ -22,6 +22,9 @@ from sqlalchemy import and_
 
 import datetime
 
+from tg2app.scrapers.propertyinfo import ForeclosureScraper
+from tgscheduler.scheduler import add_single_task
+
 __all__ = ['RootController']
 
 
@@ -44,6 +47,19 @@ class RootController(BaseController):
     admin = AdminController(model, DBSession, config_type=TGAdminConfig)
 
     error = ErrorController()
+
+    @expose('')
+    def make_wayback_happen(self):
+        add_single_task(
+            action=ForeclosureScraper().go_way_back,
+            taskname="gowayback_unscheduled",
+            initialdelay=0,
+        )
+
+    @expose('')
+    def make_scrape_happen(self):
+        ForeclosureScraper().scrape_data()
+
 
     @expose('tg2app.templates.index')
     def index(self):
