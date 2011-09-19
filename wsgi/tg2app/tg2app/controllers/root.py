@@ -10,12 +10,16 @@ from tg2app.model import DBSession, metadata
 from tg2app import model
 
 from tg2app.scrapers.propertyinfo import date_range  # A nice utility.
-from tg2app.widgets import ForeclosureGrid, ForeclosurePie, ForeclosureArea
+from tg2app.widgets import (
+    ForeclosureGrid, ForeclosurePie, ForeclosureArea, ForeclosureMap
+)
 import tw2.jit
 
 from sqlalchemy import and_
 
 import datetime
+import geojson
+import simplejson
 
 from tg2app.scrapers.propertyinfo import ForeclosureScraper
 from tgscheduler.scheduler import add_single_task
@@ -55,6 +59,22 @@ class RootController(BaseController):
     def index(self):
         """Handle the front-page."""
         redirect('/graph')
+
+    @expose('json')
+    def foreclosure_map_data(self):
+        json = geojson.FeatureCollection(
+            features=[
+                geojson.Feature(
+                    geometry=geojson.Point([fc.longitude, fc.latitude])
+                ) for fc in model.Foreclosure.query.all() if fc.map_ready
+            ]
+        )
+        return simplejson.loads(geojson.dumps(json))
+
+    @expose('tg2app.templates.widget')
+    def map(self):
+        return dict(widget=ForeclosureMap)
+
 
     @expose(content_type='text/csv')
     def export(self):

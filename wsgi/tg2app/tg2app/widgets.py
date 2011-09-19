@@ -3,6 +3,7 @@ import tw2.core as twc
 from tw2.jqplugins.jqgrid import SQLAjqGridWidget
 from tw2.jqplugins.ui import DialogWidget
 from tw2.slideymenu import MenuWidget
+from tw2.polymaps import PolyMap
 from tw2.jit import PieChart, AreaChart
 
 import docutils.examples
@@ -124,3 +125,33 @@ class ForeclosureArea(JitCustomized, AreaChart):
 
 class ForeclosurePie(JitCustomized, PieChart):
     sliceOffset = 10
+
+
+custom_polymaps_css = twc.CSSLink(
+    modname=__name__,
+    filename='public/css/custom-polymaps.css')
+
+class ForeclosureMap(PolyMap):
+    id = 'foreclosure_map'
+    data_url = '/foreclosure_map_data/'
+
+    # Both specify the css_class AND include your own custom css file that
+    # specifies what it looks like.
+    css_class = 'sample-tw2-polymaps-container-1'
+    resources = PolyMap.resources + [custom_polymaps_css]
+
+    # 10.00/43.1164/-437.5940
+    zoom = 10.0
+    center_latlon = {'lat': 43.1164, 'lon': -437.5940}
+
+    # Let the user control the map
+    interact = True
+
+    # Deep-linking
+    hash = True
+
+    # You should get your own one of these at http://cloudmade.com/register
+    cloudmade_api_key = "1a1b06b230af4efdbb989ea99e9841af"
+
+    # To style the map tiles
+    cloudmade_tileset = 'midnight-commander'
