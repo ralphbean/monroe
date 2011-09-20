@@ -200,5 +200,5 @@ class ForeclosureMap(PolyMap):
             'from_date':self.from_date,
             'to_date':self.to_date,
         })
-        super(PolyMap, self).prepare()
+        super(ForeclosureMap, self).prepare()
 
