@@ -25,6 +25,11 @@
 body {
 	background-color: f9f9f9;
 }
+
+.hasDatepicker {
+	width: 110px;
+}
+
 </style>
 
 </head>

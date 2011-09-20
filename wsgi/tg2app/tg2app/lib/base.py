@@ -10,7 +10,9 @@ import tg2app.model as model
 
 from tw2.jqplugins.ui import set_ui_theme_name
 
-from tg2app.widgets import MainMenu, ReadmeDialog
+from tg2app.widgets import MainMenu, ReadmeDialog, FromDateWidget, ToDateWidget
+
+import urllib2
 
 __all__ = ['BaseController']
 
@@ -35,6 +37,8 @@ class BaseController(TGController):
 
         tmpl_context.menu_widget = MainMenu
         tmpl_context.dialog_widget = ReadmeDialog
+        tmpl_context.from_date_widget = FromDateWidget
+        tmpl_context.to_date_widget = ToDateWidget
         set_ui_theme_name('excite-bike')
 
         return TGController.__call__(self, environ, start_response)

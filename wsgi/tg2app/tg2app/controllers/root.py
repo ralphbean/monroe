@@ -20,12 +20,16 @@ from sqlalchemy import and_
 import datetime
 import geojson
 import simplejson
+import urllib
 
 from tg2app.scrapers.propertyinfo import ForeclosureScraper
 from tgscheduler.scheduler import add_single_task
 
 __all__ = ['RootController']
 
+
+def current_url():
+    return request.application_url + request.environ['PATH_INFO']
 
 class RootController(BaseController):
     """
@@ -125,12 +129,12 @@ class RootController(BaseController):
         return dict(widget=ForeclosureGrid)
 
     @expose('tg2app.templates.widget')
-    def grantor(self, top=5):
-        return self._granted('grantor', top)
+    def grantor(self, **kw):
+        return self._granted('grantor', **kw)
 
     @expose('tg2app.templates.widget')
-    def grantee(self, top=5):
-        return self._granted('grantee', top)
+    def grantee(self, **kw):
+        return self._granted('grantee', **kw)
 
     @expose('tg2app.templates.widget')
     def day(self):
@@ -148,16 +152,38 @@ class RootController(BaseController):
     def dayofweek(self):
         return self._time('dayofweek')
 
-    def _granted(self, attr, top):
+    def make_query(self, **kw):
+        fmt = '%m/%d/%Y'
+        if not 'from_date' in kw:
+            kw['from_date'] = datetime.datetime(1989, 1, 1).strftime(fmt)
+            redirect(current_url() + '?' + urllib.urlencode(kw))
+
+        if not 'to_date' in kw:
+            kw['to_date'] = datetime.datetime.now().strftime(fmt)
+            redirect(current_url() + '?' + urllib.urlencode(kw))
+
+        from_date = datetime.datetime.strptime(kw['from_date'], fmt)
+        to_date = datetime.datetime.strptime(kw['to_date'], fmt)
+
+        return model.Foreclosure.query.filter(and_(
+            model.Foreclosure.filing_date >= from_date,
+            model.Foreclosure.filing_date <= to_date
+        ))
+
+    def _granted(self, attr, **kw):
         if not attr in ['grantor', 'grantee']:
             redirect('/')
 
+        if not 'top' in kw:
+            kw['top'] = 5
+            redirect(current_url() + '?' + urllib.urlencode(kw))
+
         try:
-            top = int(top)
+            top = int(kw['top'])
         except TypeError:
             redirect('/' + attr)
 
-        closures = model.Foreclosure.query.all()
+        closures = self.make_query(**kw).all()
 
         bucket = {}
         for c in closures:
@@ -183,7 +209,7 @@ class RootController(BaseController):
 
         pie = ForeclosurePie(data=data)
 
-        return dict(widget=pie)
+        return dict(widget=pie, title="Top %i mortgage grantors" % top)
 
     def _time(self, attr):
         lookup = {

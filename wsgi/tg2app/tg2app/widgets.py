@@ -1,13 +1,31 @@
 import tg2app.model as model
 import tw2.core as twc
 from tw2.jqplugins.jqgrid import SQLAjqGridWidget
-from tw2.jqplugins.ui import DialogWidget
+from tw2.jqplugins.ui import DialogWidget, DatePickerWidget
 from tw2.slideymenu import MenuWidget
 from tw2.polymaps import PolyMap
 from tw2.jit import PieChart, AreaChart
 
 import docutils.examples
 
+query_js = twc.JSLink(modname=__name__,
+                      filename='public/js/jquery.query-2.1.7.js')
+
+class CustomizedDatePicker(DatePickerWidget):
+    resources = DatePickerWidget.resources + [query_js]
+    options = {
+        'showAnim': 'slideDown',
+        'autoSize': True,
+        'yearRange': '1989:2011',
+        'changeYear': True,
+        'onSelect': twc.JSSymbol("function(d, i) {window.location='blah'}"),
+    }
+
+class FromDateWidget(CustomizedDatePicker):
+    id = 'from_date'
+
+class ToDateWidget(CustomizedDatePicker):
+    id = 'to_date'
 
 def foreclosure_readme():
     """ Ridiculous """
