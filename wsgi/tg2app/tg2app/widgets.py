@@ -11,21 +11,37 @@ import docutils.examples
 query_js = twc.JSLink(modname=__name__,
                       filename='public/js/jquery.query-2.1.7.js')
 
+
 class CustomizedDatePicker(DatePickerWidget):
     resources = DatePickerWidget.resources + [query_js]
+
+onselect_tmpl = """function(d, i){
+    window.location = 'http://' + location.host + location.pathname + \
+        $.query.set('%s', d).toString();
+}"""
+
+
+class FromDateWidget(CustomizedDatePicker):
+    id = 'from_date'
     options = {
         'showAnim': 'slideDown',
         'autoSize': True,
         'yearRange': '1989:2011',
         'changeYear': True,
-        'onSelect': twc.JSSymbol("function(d, i) {window.location='blah'}"),
+        'onSelect': twc.JSSymbol(onselect_tmpl % 'from_date'),
     }
 
-class FromDateWidget(CustomizedDatePicker):
-    id = 'from_date'
 
 class ToDateWidget(CustomizedDatePicker):
     id = 'to_date'
+    options = {
+        'showAnim': 'slideDown',
+        'autoSize': True,
+        'yearRange': '1989:2011',
+        'changeYear': True,
+        'onSelect': twc.JSSymbol(onselect_tmpl % 'to_date'),
+    }
+
 
 def foreclosure_readme():
     """ Ridiculous """
@@ -148,6 +164,7 @@ class ForeclosurePie(JitCustomized, PieChart):
 custom_polymaps_css = twc.CSSLink(
     modname=__name__,
     filename='public/css/custom-polymaps.css')
+
 
 class ForeclosureMap(PolyMap):
     id = 'foreclosure_map'
