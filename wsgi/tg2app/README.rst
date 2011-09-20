@@ -56,7 +56,7 @@ Bugs and Feature Requests
 -------------------------
 
 Please submit bug notifications and feature requests at on the project's `github
-page <http://github.com/ralphbean/issues>`_.
+page <http://github.com/ralphbean/monroe/issues>`_.
 
 TODO
 ----
