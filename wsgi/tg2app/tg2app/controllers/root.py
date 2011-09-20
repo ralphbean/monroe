@@ -27,6 +27,25 @@ from tgscheduler.scheduler import add_single_task
 
 __all__ = ['RootController']
 
+fmt = '%m/%d/%Y'
+
+def make_query(**kw):
+    if not 'from_date' in kw:
+        kw['from_date'] = datetime.datetime(1989, 1, 1).strftime(fmt)
+        redirect(current_url() + '?' + urllib.urlencode(kw))
+
+    if not 'to_date' in kw:
+        kw['to_date'] = datetime.datetime.now().strftime(fmt)
+        redirect(current_url() + '?' + urllib.urlencode(kw))
+
+    from_date = datetime.datetime.strptime(kw['from_date'], fmt)
+    to_date = datetime.datetime.strptime(kw['to_date'], fmt)
+
+    return model.Foreclosure.query.filter(and_(
+        model.Foreclosure.filing_date >= from_date,
+        model.Foreclosure.filing_date <= to_date
+    ))
+
 
 def current_url():
     return request.application_url + request.environ['PATH_INFO']
@@ -65,20 +84,20 @@ class RootController(BaseController):
         redirect('/graph')
 
     @expose('json')
-    def foreclosure_map_data(self):
+    def foreclosure_map_data(self, **kw):
         json = geojson.FeatureCollection(
             features=[
                 geojson.Feature(
                     geometry=geojson.Point([fc.longitude, fc.latitude])
-                ) for fc in model.Foreclosure.query.all() if fc.map_ready
+                ) for fc in make_query(**kw).all() if fc.map_ready
             ]
         )
         return simplejson.loads(geojson.dumps(json))
 
     @expose('tg2app.templates.widget')
-    def map(self):
-        return dict(widget=ForeclosureMap)
-
+    def map(self, **kw):
+        make_query(**kw)
+        return dict(widget=ForeclosureMap(**kw), title="Foreclosures")
 
     @expose(content_type='text/csv')
     def export(self):
@@ -87,16 +106,17 @@ class RootController(BaseController):
         return header + '\n'.join([closure.to_csv() for closure in closures])
 
     @expose('tg2app.templates.widget')
-    def graph(self, *args, **kwargs):
+    def graph(self, **kw):
 
+        base_query = make_query(**kw)
         bucket = {}
         step = datetime.timedelta(days=365)
         for date in date_range(
-            datetime.datetime(1989, 1, 1),
-            datetime.datetime.now(),
+            datetime.datetime.strptime(kw['from_date'], fmt),
+            datetime.datetime.strptime(kw['to_date'], fmt),
             step=365,
         ):
-            query = model.Foreclosure.query.filter(
+            query = base_query.filter(
                 and_(
                     model.Foreclosure.filing_date >= date,
                     model.Foreclosure.filing_date < date + step
@@ -118,7 +138,7 @@ class RootController(BaseController):
 
         graph = ForeclosureArea(data=data)
 
-        return dict(widget=graph)
+        return dict(widget=graph, title="Number of foreclosures")
 
     @expose('json')
     def jqgrid(self, *args, **kwargs):
@@ -137,38 +157,20 @@ class RootController(BaseController):
         return self._granted('grantee', **kw)
 
     @expose('tg2app.templates.widget')
-    def day(self):
-        return self._time('day')
+    def day(self, **kw):
+        return self._time('day', **kw)
 
     @expose('tg2app.templates.widget')
-    def month(self):
-        return self._time('month')
+    def month(self, **kw):
+        return self._time('month', **kw)
 
     @expose('tg2app.templates.widget')
-    def year(self):
-        return self._time('year')
+    def year(self, **kw):
+        return self._time('year', **kw)
 
     @expose('tg2app.templates.widget')
-    def dayofweek(self):
-        return self._time('dayofweek')
-
-    def make_query(self, **kw):
-        fmt = '%m/%d/%Y'
-        if not 'from_date' in kw:
-            kw['from_date'] = datetime.datetime(1989, 1, 1).strftime(fmt)
-            redirect(current_url() + '?' + urllib.urlencode(kw))
-
-        if not 'to_date' in kw:
-            kw['to_date'] = datetime.datetime.now().strftime(fmt)
-            redirect(current_url() + '?' + urllib.urlencode(kw))
-
-        from_date = datetime.datetime.strptime(kw['from_date'], fmt)
-        to_date = datetime.datetime.strptime(kw['to_date'], fmt)
-
-        return model.Foreclosure.query.filter(and_(
-            model.Foreclosure.filing_date >= from_date,
-            model.Foreclosure.filing_date <= to_date
-        ))
+    def dayofweek(self, **kw):
+        return self._time('dayofweek', **kw)
 
     def _granted(self, attr, **kw):
         if not attr in ['grantor', 'grantee']:
@@ -183,7 +185,7 @@ class RootController(BaseController):
         except TypeError:
             redirect('/' + attr)
 
-        closures = self.make_query(**kw).all()
+        closures = make_query(**kw).all()
 
         bucket = {}
         for c in closures:
@@ -211,7 +213,7 @@ class RootController(BaseController):
 
         return dict(widget=pie, title="Top %i mortgage grantors" % top)
 
-    def _time(self, attr):
+    def _time(self, attr, **kw):
         lookup = {
             'day': '%d',
             'month': '%b',
@@ -222,7 +224,7 @@ class RootController(BaseController):
         if attr not in lookup.keys():
             redirect('/')
 
-        closures = model.Foreclosure.query.all()
+        closures = make_query(**kw).all()
 
         fmt = lookup[attr]
         bucket = {}
@@ -247,4 +249,4 @@ class RootController(BaseController):
 
         pie = ForeclosurePie(data=data)
 
-        return dict(widget=pie)
+        return dict(widget=pie, title="Number of foreclosures by %s" % attr)

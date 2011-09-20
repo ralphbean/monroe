@@ -7,6 +7,7 @@ from tw2.polymaps import PolyMap
 from tw2.jit import PieChart, AreaChart
 
 import docutils.examples
+import urllib
 
 query_js = twc.JSLink(modname=__name__,
                       filename='public/js/jquery.query-2.1.7.js')
@@ -190,3 +191,14 @@ class ForeclosureMap(PolyMap):
 
     # To style the map tiles
     cloudmade_tileset = 'midnight-commander'
+
+    from_date = twc.Param()
+    to_date = twc.Param()
+
+    def prepare(self):
+        self.data_url = '/foreclosure_map_data?' + urllib.urlencode({
+            'from_date':self.from_date,
+            'to_date':self.to_date,
+        })
+        super(PolyMap, self).prepare()
+
