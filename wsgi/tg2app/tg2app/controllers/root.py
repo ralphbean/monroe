@@ -124,7 +124,7 @@ class RootController(BaseController):
     def jqgrid(self, *args, **kwargs):
         return ForeclosureGrid.request(request).body
 
-    @expose('tg2app.templates.widget')
+    @expose('tg2app.templates.widget_nodates')
     def grid(self):
         return dict(widget=ForeclosureGrid)
 
