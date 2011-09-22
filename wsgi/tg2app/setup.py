@@ -55,7 +55,7 @@ setup(
         "tw2.jqplugins.jqgrid",
         "tw2.slideymenu",
         "tw2.jit",
-        "tw2.polymaps",
+        "tw2.polymaps>=0.1.a4",
         ],
     setup_requires=["PasteScript >= 1.7"],
     paster_plugins=['PasteScript', 'Pylons', 'TurboGears2', 'tg.devtools'],
