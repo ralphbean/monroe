@@ -88,7 +88,9 @@ class RootController(BaseController):
         json = geojson.FeatureCollection(
             features=[
                 geojson.Feature(
-                    geometry=geojson.Point([fc.longitude, fc.latitude])
+                    geometry=geojson.Point([fc.longitude, fc.latitude]),
+                    id=fc.control_no,
+                    properties=fc.to_geojson(),
                 ) for fc in make_query(**kw).all() if fc.map_ready
             ]
         )

@@ -192,6 +192,15 @@ class ForeclosureMap(PolyMap):
     # To style the map tiles
     cloudmade_tileset = 'midnight-commander'
 
+    properties_callback = """
+    function (_layer) {
+        _layer.on("load", org.polymaps.stylist()
+            .title(function(d) {
+                return "(" + d.properties.filing_date + ")  " + d.properties.formatted_address;
+            }));
+        return _layer
+    }"""
+
     from_date = twc.Param()
     to_date = twc.Param()
 

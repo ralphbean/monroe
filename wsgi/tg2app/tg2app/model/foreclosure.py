@@ -63,3 +63,12 @@ class Foreclosure(DeclarativeBase):
         return "|".join([
             str(getattr(self, attr)) for attr in self.csv_headers()
         ])
+
+    def to_dict(self):
+        return dict([(attr, getattr(self, attr))
+                     for attr in self.csv_headers()])
+
+    def to_geojson(self):
+        d = self.to_dict()
+        d['filing_date'] = d['filing_date'].strftime('%m/%d/%Y')
+        return d
