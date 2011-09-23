@@ -11,6 +11,8 @@ import urllib
 
 query_js = twc.JSLink(modname=__name__,
                       filename='public/js/jquery.query-2.1.7.js')
+modal_js = twc.JSLink(modname=__name__,
+                      filename='public/js/modal.js')
 
 
 class CustomizedDatePicker(DatePickerWidget):
@@ -95,20 +97,20 @@ class ForeclosureGrid(SQLAjqGridWidget):
     }
 
 
-def loading_dialog(href):
-    return "javascript:loadingDialog('%s');" % href
-
-modal_js = twc.JSLink(modname=__name__,
-                      filename='public/js/modal.js')
+def loading_dialog(href, pass_query_string=True):
+    target = "'%s'" % href
+    if pass_query_string:
+        target = target + " + $.query.toString()"
+    return "javascript:loadingDialog(%s);" % target
 
 
 class MainMenu(MenuWidget):
-    resources = MenuWidget.resources + [modal_js]
+    resources = MenuWidget.resources + [modal_js, query_js]
     id = 'foreclosure-menu'
     items = [
         {
             'label': 'Grid',
-            'href': loading_dialog('/grid'),
+            'href': loading_dialog('/grid', pass_query_string=False),
         }, {
             'label': 'By Grantor',
             'href': loading_dialog('/grantor'),
@@ -135,7 +137,7 @@ class MainMenu(MenuWidget):
             'href': loading_dialog('/map'),
         }, {
             'label': 'Export (.csv)',
-            'href': loading_dialog('/export.csv'),
+            'href': loading_dialog('/export.csv', pass_query_string=False),
         }, {
             'label': 'About',
             'href': "javascript:(function(){$('#foreclosure_dialog').dialog('open');})();"
