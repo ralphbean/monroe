@@ -46,10 +46,13 @@ function setupPolymapControls(
         return map;
 }
 
-function setupPolymapData(map, data_url, timeout)
+function setupPolymapData(map, data_url, timeout, properties_callback)
 {
         if ( data_url ) {
                 var layer = po.geoJson().url(data_url);
+                if ( properties_callback ) {
+                        layer = properties_callback(layer);
+                }
                 map.add(layer);
                 if ( timeout != 0 ) {
                         setTimeout(function(){
