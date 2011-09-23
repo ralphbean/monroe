@@ -83,7 +83,7 @@ class ForeclosureScraper(object):
         if not end_date:
             end_date = datetime.datetime.today()
         if not beg_date:
-            beg_date = end_date - datetime.timedelta(days=3)
+            beg_date = end_date - datetime.timedelta(days=4)
 
         # Sanity
         if (end_date <= beg_date):
