@@ -109,6 +109,9 @@ class MainMenu(MenuWidget):
     id = 'foreclosure-menu'
     items = [
         {
+            'label': 'Map',
+            'href': loading_dialog('/map'),
+        }, {
             'label': 'Grid',
             'href': loading_dialog('/grid', pass_query_string=False),
         }, {
@@ -132,9 +135,6 @@ class MainMenu(MenuWidget):
         }, {
             'label': 'Graph',
             'href': loading_dialog('/graph'),
-        }, {
-            'label': 'Map',
-            'href': loading_dialog('/map'),
         }, {
             'label': 'Export (.csv)',
             'href': loading_dialog('/export.csv', pass_query_string=False),
