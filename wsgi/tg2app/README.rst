@@ -84,8 +84,8 @@ This app is written in `Python <http://python.org>`_ using `Turbogears 2
 originally written for and borrowed from `civx.us
 <https://fedorahosted.org/civx/>`_.
 
-To install it and develop on it, you'll need a working copy of `python
-<http://python.org>`_ and `virtualenv
+To install it and develop on it, you'll need a working copy of `git
+<http://git-scm.com/>`_, `python <http://python.org>`_ and `virtualenv
 <http://pypi.python.org/pypi/virtualenv>`_.  With those, the app can install its
 own dependencies.
 
