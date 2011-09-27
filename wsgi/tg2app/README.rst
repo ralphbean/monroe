@@ -58,13 +58,6 @@ Bugs and Feature Requests
 Please submit bug notifications and feature requests at on the project's `github
 page <http://github.com/ralphbean/monroe/issues>`_.
 
-TODO
-----
-
-Select a timespan for any view. i.e., view only the top 5 grantors between 1994
-and 1998.
-
-
 Authors
 -------
 
