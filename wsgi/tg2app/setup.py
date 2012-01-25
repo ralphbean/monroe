@@ -33,6 +33,9 @@ setup(
     author_email='',
     #url='',
     install_requires=[
+        "Pylons==1.0.0",
+        "WebOb<=1.0.8",
+        "PasteDeploy",
         "tg.devtools",
         "tgscheduler",
         "TurboGears2 >= 2.1.2",
