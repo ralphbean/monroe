@@ -179,7 +179,7 @@ class ForeclosureScraper(object):
         log.info("Running the go_way_back robot from %s to %s." %
                   (fdate.strftime(fmt), tdate.strftime(fmt)))
 
-        for date in date_range(fdate, tdate, step):
+        for date in reversed(list(date_range(fdate, tdate, step))):
             log.warn("Starting wayback scrape.")
             self.scrape_data(
                 beg_date=date,
