@@ -28,6 +28,27 @@ from tg import config
 logging.basicConfig()
 log = logging.getLogger('fc-scrape')
 
+the_really_ridiculous_details = [
+        #'Subdivison',
+    'Lot Number',
+    'Landuse',
+    'Zoning',
+    'Frontage',
+    'Depth',
+    'Land Value',
+    'Assessed Value',
+    'Improvements',
+    'Year Built',
+    'Square Footage',
+    'Stories',
+    'Housing Units',
+    'Rooms',
+    'Bedrooms',
+    'Baths',
+    'Acreage',
+]
+
+
 def date_range(from_date, to_date, step):
     """ Utility to produce a date range """
     while from_date < to_date:
@@ -49,6 +70,45 @@ def cross_reference(address):
         return name
     except Exception as e:
         return "(error)"
+
+def get_ridiculous_details(address):
+
+    # Initialize details to a dict of key -> 'DNE'
+    details = dict(zip(
+        the_really_ridiculous_details,
+        ['(no data)']*len(the_really_ridiculous_details)
+    ))
+
+    first_two_words = ' '.join(address.split()[:2])
+    base = 'http://geo.cityofrochester.gov/'
+    vals = {'qrytype': 'address', 'qrystr': first_two_words}
+    qstr = urllib.urlencode(vals)
+    reqstr = base + 'results.asp?' + qstr
+    html = urllib.urlopen(reqstr).read()
+
+    soup = BeautifulSoup(html)
+    try:
+        link = soup.findAll('table')[0].findAll('tr')[3].findAll('td')[4].findAll('a')[0]['href']
+    except:
+        return details
+
+    reqstr = base + link
+    html = urllib.urlopen(reqstr).read()
+    soup = BeautifulSoup(html)
+
+    # Fill in every detail that we can...
+    for table in soup.findAll('table')[2:4]:
+        for tr in table.findAll('tr'):
+            try:
+                key, value = [span.text for span in tr.findAll('span')]
+                key = key.strip()[:-1]
+                if key in the_really_ridiculous_details:
+                    details[key] = value
+            except:
+                # Whatever.. the entry will remains 'DNE'
+                pass
+
+    return details
 
 def geocode(address):
     # TODO -- a more open way of doing this.
@@ -80,6 +140,7 @@ class ForeclosureScraper(object):
             'Control No',
             # This is pulled in from geo.cityofrochester.gov
             'XReffed Owner',
+    ] + the_really_ridiculous_details + [
             # These are pulled during scrape from Google Maps
             'Map Ready',
             'Formatted Address',
@@ -261,6 +322,8 @@ class ForeclosureScraper(object):
         name = cross_reference(addr)
         row['XReffed Owner'] = name
         print "got", name, "for", addr
+        details = get_ridiculous_details(addr)
+        row.update(details)
         return row
 
     def make_geocoded_row(self, row):
