@@ -28,9 +28,9 @@ if sys.version_info[:2] == (2,4):
 setup(
     name='tg2app',
     version='0.1',
-    description='',
-    author='',
-    author_email='',
+    description='Scrape foreclosures from Monroe County for great justice.',
+    author='Ralph Bean',
+    author_email='rbean@redhat.com',
     #url='',
     install_requires=[
         "Pylons==1.0.0",
