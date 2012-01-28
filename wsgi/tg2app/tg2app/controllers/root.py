@@ -66,6 +66,14 @@ class RootController(BaseController):
     """
 
     @expose('')
+    def make_xrefs_happen(self):
+        add_single_task(
+            action=ForeclosureScraper().update_xrefs,
+            taskname="xrefs_for_life_unscheduled",
+            initialdelay=0,
+        )
+
+    @expose('')
     def make_wayback_happen(self):
         add_single_task(
             action=ForeclosureScraper().go_way_back,
