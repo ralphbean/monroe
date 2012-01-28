@@ -60,6 +60,7 @@ setup(
         "tw2.slideymenu",
         "tw2.jit",
         "tw2.polymaps>=0.1.a4",
+        "ansi2html", # for the rss feed...
         ],
     setup_requires=["PasteScript >= 1.7"],
     paster_plugins=['PasteScript', 'Pylons', 'TurboGears2', 'tg.devtools'],

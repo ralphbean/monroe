@@ -15,7 +15,7 @@ from tg2app.widgets import (
 )
 import tw2.jit
 
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 
 import datetime
 import geojson
@@ -24,6 +24,11 @@ import urllib
 
 from tg2app.scrapers.propertyinfo import ForeclosureScraper
 from tgscheduler.scheduler import add_single_task
+
+# Stuff for the atom feed
+from tg.controllers import CUSTOM_CONTENT_TYPE
+from webhelpers.feedgenerator import Atom1Feed
+from pylons import response
 
 __all__ = ['RootController']
 
@@ -64,6 +69,28 @@ class RootController(BaseController):
     must be wrapped around with :class:`tg.controllers.WSGIAppController`.
 
     """
+
+    @expose(content_type=CUSTOM_CONTENT_TYPE)
+    def atom1( self ):
+        """Produce an atom-1.0 feed via feedgenerator module"""
+        feed = Atom1Feed(
+            title=u"Latest notices of pendency",
+            link=current_url(),
+            description=u"These are the latest foreclosures pulled together by the scraper",
+            language=u"en",
+        )
+
+        latest = model.Foreclosure.query.order_by(
+            desc(model.Foreclosure.filing_date)
+        ).limit(40).all()
+
+        for closure in latest:
+            feed.add_item(title=closure.formatted_address,
+                          link=u"http://monroe-threebean.rhcloud.com/",
+                          description=closure.fancy_format())
+
+        response.content_type = 'application/atom+xml'
+        return feed.writeString('utf-8')
 
     @expose('')
     def make_xrefs_happen(self):

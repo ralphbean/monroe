@@ -139,6 +139,9 @@ class MainMenu(MenuWidget):
             'label': 'Export (.csv)',
             'href': loading_dialog('/export.csv', pass_query_string=False),
         }, {
+            'label': 'RSS (atom)',
+            'href': loading_dialog('/atom1', pass_query_string=False),
+        }, {
             'label': 'About',
             'href': "javascript:(function(){$('#foreclosure_dialog').dialog('open');})();"
         }

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Sample model module."""
 
+import sqlalchemy as sa
 from sqlalchemy import *
 from sqlalchemy.orm import mapper, relation
 from sqlalchemy.orm.attributes import InstrumentedAttribute
@@ -11,29 +12,18 @@ from tg2app.model import DeclarativeBase, metadata, DBSession
 
 from datetime import datetime
 
+import pprint
+from ansi2html import Ansi2HTMLConverter
+conv = Ansi2HTMLConverter()
 
 class Foreclosure(DeclarativeBase):
-    """
-    {'Book': u'NOTICE OF PENDENCY',
-     'Book Page': u'1160 52',
-     'Control No': u'201109120267',
-     'Filing Date': u'9/12/2011',
-     'Formatted Address': '277 Raspberry Patch Dr, Rochester, NY 14612, USA',
-     'Grantee': u'SUKHENKO CHRISTINE M',
-     'Grantor': u'WELLS FARGO BANK NA',
-     'Index Detail': u'',
-     'Instrument Type': u'NOTICE OF PENDENCY MORTGAGE FORECLOSURE',
-     'Land Description': u'',
-     'Latitude': 43.248163,
-     'Longitude': -77.727037,
-     'XReffed Owner': u'Bob Loblaw',
-     'Map Ready': True,
-     'Property Address': u'277 RASPBERRY PATCH GREECE',
-     'Reference 1': u'I2011010924',
-     'Reference 2': u'MCZ010184',
-     'View Image': u'(4)'}
-    """
     __tablename__ = 'foreclosure_table'
+
+    def fancy_format(self):
+        d = dict()
+        for prop in sa.orm.class_mapper(Foreclosure).iterate_properties:
+            d[prop.key] = str(getattr(self, prop.key))
+        return conv.convert(pprint.pformat(d))
 
     control_no = Column(Unicode(255), nullable=False, primary_key=True)
 
