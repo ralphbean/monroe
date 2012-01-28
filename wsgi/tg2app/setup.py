@@ -55,6 +55,7 @@ setup(
         "mechanize",
         "BeautifulSoup",
         "docutils",
+        "tw2.jqplugins.ui>=2.0b26",
         "tw2.jqplugins.jqgrid",
         "tw2.slideymenu",
         "tw2.jit",
