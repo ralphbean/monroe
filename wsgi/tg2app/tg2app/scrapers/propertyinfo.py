@@ -34,6 +34,21 @@ def date_range(from_date, to_date, step):
         yield from_date
         from_date = from_date + datetime.timedelta(days=step)
 
+def cross_reference(address):
+    try:
+        first_two_words = ' '.join(address.split()[:2])
+        base = 'http://geo.cityofrochester.gov/results.asp?'
+        vals = {'qrytype': 'address', 'qrystr': first_two_words}
+        qstr = urllib.urlencode(vals)
+        reqstr = base + qstr
+        html = urllib.urlopen(reqstr).read()
+
+        soup = BeautifulSoup(html)
+        text = soup.findAll('table')[0].findAll('tr')[3].findAll('td')[0].text
+        name = ' '.join(text.split()[1:]).strip()
+        return name
+    except Exception as e:
+        return "(error)"
 
 def geocode(address):
     # TODO -- a more open way of doing this.
@@ -63,6 +78,8 @@ class ForeclosureScraper(object):
             'Reference 2',
             'Land Description',
             'Control No',
+            # This is pulled in from geo.cityofrochester.gov
+            'XReffed Owner',
             # These are pulled during scrape from Google Maps
             'Map Ready',
             'Formatted Address',
@@ -130,6 +147,11 @@ class ForeclosureScraper(object):
         if len(data) == 0:
             log.warn("Skipping out early.  No rows found.")
             return
+
+        # Cross reference each row
+        log.warn("Cross-referencing each foreclosure address (who knows!).")
+        data = [self.make_cross_referenced_row(row) for row in data]
+        # Done.
 
         # Geocode each row
         log.warn("Geocoding each foreclosure address (may take a while).")
@@ -209,6 +231,13 @@ class ForeclosureScraper(object):
             self.headers[-2]: row[-2],
             self.headers[-1]: row[-1],
         }
+
+    def make_cross_referenced_row(self, row):
+        addr = row['Property Address']
+        name = cross_reference(addr)
+        row['XReffed Owner'] = name
+        print "got", name, "for", addr
+        return row
 
     def make_geocoded_row(self, row):
         r = self.geodict_from_row

@@ -9,6 +9,8 @@ from sqlalchemy.types import Integer, Unicode, Float, Boolean, DateTime
 
 from tg2app.model import DeclarativeBase, metadata, DBSession
 
+from datetime import datetime
+
 
 class Foreclosure(DeclarativeBase):
     """
@@ -24,6 +26,7 @@ class Foreclosure(DeclarativeBase):
      'Land Description': u'',
      'Latitude': 43.248163,
      'Longitude': -77.727037,
+     'XReffed Owner': u'Bob Loblaw',
      'Map Ready': True,
      'Property Address': u'277 RASPBERRY PATCH GREECE',
      'Reference 1': u'I2011010924',
@@ -50,6 +53,8 @@ class Foreclosure(DeclarativeBase):
     reference_1 = Column(Unicode(255), nullable=False)
     reference_2 = Column(Unicode(255), nullable=False)
     view_image = Column(Unicode(255), nullable=False)
+    xreffed_owner = Column(Unicode(255), nullable=False)
+    xref_updated = Column(DateTime, nullable=False, default=datetime.now)
 
 
     def csv_headers(self):
