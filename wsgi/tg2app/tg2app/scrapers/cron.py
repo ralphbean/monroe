@@ -27,6 +27,12 @@ def schedule():
 #        initialdelay=60,
 #    )
     add_interval_task(
+        action=ForeclosureScraper().update_xrefs,
+        taskname="xrefamania",
+        interval=ONE_DAY,
+        initialdelay=8
+    )
+    add_interval_task(
         action=ForeclosureScraper().scrape_data,
         taskname="test1",
         interval=ONE_DAY,

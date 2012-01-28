@@ -87,7 +87,31 @@ class ForeclosureScraper(object):
             'Longitude',
     ]
 
+    def update_xrefs(self):
+        """ Run as a tg-scheduled thing.  Go through our
+        whole DB and check to see who currently owns the house.
+        """
+
+        print "Running update_xrefs.  Checking our whole DB."
+        import transaction
+
+        for closure in m.Foreclosure.query.all():
+            current_name = closure.xreffed_owner
+            addr = closure.property_address
+            print "(xrefs) Inspecting", addr, "(", current_name, ")"
+            new_name = cross_reference(addr)
+            if new_name != current_name:
+                print "The cross referenced name changed from",
+                print current_name, "to", new_name
+                closure.xreffed_owner = new_name
+                closure.xref_updated = datetime.datetime.now()
+
+        transaction.commit()
+
     def scrape_data(self, beg_date=None, end_date=None, tries=0):
+        """ Run as tg-scheduled thing.
+        This function does everything.
+        """
 
         if tries > 3:
             raise ValueError, "Tried 3 times already.. failing!"
