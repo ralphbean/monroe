@@ -48,7 +48,7 @@ def geocode(address):
 class ForeclosureScraper(object):
     """Property Info Mortgage Foreclosure Scraper """
     base = 'https://gov.propertyinfo.com'
-    apps_base = 'https://govapps.propertyinfo.com'
+    apps_base = 'https://govapps1.propertyinfo.com'
     headers = [
             'Index Detail',
             'View Image',
