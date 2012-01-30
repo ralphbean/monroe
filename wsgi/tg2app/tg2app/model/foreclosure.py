@@ -87,4 +87,5 @@ class Foreclosure(DeclarativeBase):
     def to_geojson(self):
         d = self.to_dict()
         d['filing_date'] = d['filing_date'].strftime('%m/%d/%Y')
+        d['xref_updated'] = d['xref_updated'].strftime('%m/%d/%Y')
         return d
