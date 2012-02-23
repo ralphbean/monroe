@@ -177,6 +177,12 @@ class ForeclosureScraper(object):
         if tries > 3:
             raise ValueError, "Tried 3 times already.. failing!"
 
+        oldest_date = datetime.datetime(1, 1, 1998)
+        if beg_date < oldest_date:
+            log.warn("%r is before %r.  We don't care about data that old."
+                     "Bailing." % (beg_date, oldest_date))
+            return
+
         # Some initialization
         data = []
         fmt = '%m/%d/%Y'
