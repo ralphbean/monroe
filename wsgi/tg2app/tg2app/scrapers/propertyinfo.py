@@ -177,12 +177,6 @@ class ForeclosureScraper(object):
         if tries > 3:
             raise ValueError, "Tried 3 times already.. failing!"
 
-        oldest_date = datetime.datetime(1998, 1, 1)
-        if beg_date < oldest_date:
-            log.warn("%r is before %r.  We don't care about data that old."
-                     "Bailing." % (beg_date, oldest_date))
-            return
-
         # Some initialization
         data = []
         fmt = '%m/%d/%Y'
@@ -198,6 +192,12 @@ class ForeclosureScraper(object):
             raise ValueError("end date must come after begin date")
         if (end_date - beg_date) > datetime.timedelta(days=15):
             raise ValueError("Cannot scrape tdelta > 15 days.  Source hangs.")
+
+        oldest_date = datetime.datetime(1998, 1, 1)
+        if beg_date < oldest_date:
+            log.warn("%r is before %r.  We don't care about data that old."
+                     "Bailing." % (beg_date, oldest_date))
+            return
 
         # Setting up our mechanize browser
         self.init_browser()
