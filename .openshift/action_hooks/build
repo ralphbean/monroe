@@ -4,6 +4,7 @@
 set -e
 export PATH=$PATH:~/$OPENSHIFT_APP_NAME/virtenv/bin/
 
+virtualenv ~/$OPENSHIFT_APP_NAME/virtenv
 source ~/$OPENSHIFT_APP_NAME/virtenv/bin/activate
 
 if [ -z $OPENSHIFT_DB_HOST ]
@@ -33,9 +34,3 @@ if [ ! -e $OPENSHIFT_DATA_DIR/DB_INITIALIZED ]; then
     paster setup-app production.ini
     touch $OPENSHIFT_DATA_DIR/DB_INITIALIZED
 fi
-
-# Run the test suite automatically
-# At the moment failure does not prevent the code from getting deployed
-echo "Running the test suite"
-unset OPENSHIFT_APP_NAME
-nosetests -q
