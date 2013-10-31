@@ -2,7 +2,7 @@
 # TurboGears OpenShift post-deploy pre-start configuration
 
 set -e
-export VENV=$OPENSHIFT_REPO_DIR/data/virtenv
+export VENV=$OPENSHIFT_DATA_DIR/virtenv
 
 export PATH=$PATH:$VENV/bin/
 
