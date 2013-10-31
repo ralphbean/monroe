@@ -61,6 +61,9 @@ setup(
         "tw2.slideymenu<2.2",
         "tw2.jit<2.2",
         "tw2.polymaps<2.2",
+
+        "mysql-python", # for production
+
         #"PasteDeploy",
         ],
     setup_requires=["PasteScript >= 1.7"],
