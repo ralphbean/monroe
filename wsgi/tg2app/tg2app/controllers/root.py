@@ -209,6 +209,10 @@ class RootController(BaseController):
     def dayofweek(self, **kw):
         return self._time('dayofweek', **kw)
 
+    @expose()
+    def health(self, **kw):
+        return "I'm OK"
+
     def _granted(self, attr, **kw):
         if not attr in ['grantor', 'grantee']:
             redirect('/')
