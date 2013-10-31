@@ -13,8 +13,6 @@ from tg2app.model import DeclarativeBase, metadata, DBSession
 from datetime import datetime
 
 import pprint
-from ansi2html import Ansi2HTMLConverter
-conv = Ansi2HTMLConverter()
 
 class Foreclosure(DeclarativeBase):
     __tablename__ = 'foreclosure_table'
@@ -23,7 +21,7 @@ class Foreclosure(DeclarativeBase):
         d = dict()
         for prop in sa.orm.class_mapper(Foreclosure).iterate_properties:
             d[prop.key] = str(getattr(self, prop.key))
-        return conv.convert(pprint.pformat(d))
+        return pprint.pformat(d)
 
     control_no = Column(Unicode(255), nullable=False, primary_key=True)
 
