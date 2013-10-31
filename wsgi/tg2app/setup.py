@@ -34,6 +34,7 @@ setup(
     #url='',
     install_requires=[
         "Pylons==1.0.0",
+        "WebTest==1.2.3",
         "WebOb<=1.0.8",
         "PasteDeploy",
         "tg.devtools<2.2",
