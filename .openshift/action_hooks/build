@@ -2,10 +2,12 @@
 # TurboGears OpenShift post-deploy pre-start configuration
 
 set -e
-export PATH=$PATH:~/$OPENSHIFT_APP_NAME/virtenv/bin/
+export VENV=$OPENSHIFT_REPO_DIR/libs/virtenv
 
-virtualenv ~/$OPENSHIFT_APP_NAME/virtenv
-source ~/$OPENSHIFT_APP_NAME/virtenv/bin/activate
+export PATH=$PATH:$VENV/bin/
+
+virtualenv $VENV
+source $VENV/bin/activate
 
 if [ -z $OPENSHIFT_DB_HOST ]
 then
