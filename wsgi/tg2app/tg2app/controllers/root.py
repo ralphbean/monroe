@@ -211,7 +211,7 @@ class RootController(BaseController):
 
     @expose()
     def health(self, **kw):
-        return "I'm OK"
+        return "I am OK"
 
     def _granted(self, attr, **kw):
         if not attr in ['grantor', 'grantee']:
